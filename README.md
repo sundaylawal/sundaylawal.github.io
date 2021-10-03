@@ -1,2 +1,1 @@
-# sundaylawal.github.io
-My website
+# https://sundaylawal.github.io
