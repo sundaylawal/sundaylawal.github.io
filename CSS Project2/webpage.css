@@ -1,0 +1,470 @@
+body {
+  background-color: lightyellow;
+}
+
+.sbutton {
+  background-color: #303030;
+  color: white;
+  font-size: 0.6em;
+  padding: 8px;
+  margin-top: 10%;
+}
+
+.sbutton:hover {
+  background-color: lightgray;
+  color: black;
+}
+
+
+.ruler {
+  width: 80%;
+  height: 2px;
+  background-color: yellowgreen;
+  margin-bottom: 5%;
+}
+.bigbox > h2 {
+  padding: 0px;
+  margin: 0px;
+}
+.header {
+  width: 100%;
+  height: 200px;
+
+  overflow: hidden;
+}
+
+.box1 {
+  width: 5%;
+  height: 100%;
+
+  float: left;
+}
+
+.logo {
+  width: 25%;
+  height: 100%;
+
+  float: left;
+  position: relative;
+}
+
+@keyframes logo {
+  0% { top: 0%;  left: 0; width: 90%; height: 90%;}
+  100% { top: 40%; left: 30%;  width: 25%; height: 25%;}
+}
+
+.logo > img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  box-shadow: 0px 0px 5px yellowgreen;
+  border-radius: 20%;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  animation-name: logo;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+
+}
+
+
+.titlegroup{
+  font-family: cursive;
+  overflow: hidden;
+  position: relative;
+}
+
+.titleu {
+
+  animation-name: titleu;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  position: absolute;
+  top: 80%;
+}
+
+.titled {
+  width: auto;
+  animation-name: titled;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  color: yellowgreen;
+  font-family: Brush Script MT;
+  font-size: 1.5em;
+}
+
+@keyframes titleu{
+
+  1% {top: 80%;}
+  100% {top: -50%;}
+}
+
+@keyframes titled{
+
+  1% {margin-top: 0%;}
+  100% {margin-top: 60%;}
+}
+
+.stage {
+  width: 100%;
+  height: 50px;
+  background-color: olivedrab;
+  overflow: hidden;
+  font-size: 0.8em;
+}
+
+
+
+.slidegroup{
+  width:300%;
+  height:100%;
+  animation-name: show;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+}
+.slide{
+text-align: center;
+padding-top: 15px;
+float: left;
+width:  33.33%;
+height: 100%;
+}
+
+.yellow {
+  background-color: yellow;
+}
+.slide > h4 {
+  display: inline;
+}
+
+@keyframes show {
+10% {margin-left: 0px;}
+50% {margin-left: -100%; }
+100% {margin-left: -200%;}
+
+}
+
+
+
+.hero {
+  width:100%;
+  height: 400px;
+  background-color: pink;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero > img {
+  width: 100%;
+  height: 100%;
+}
+
+.messagebox {
+  position:absolute;
+  background-color: #B0B0B0;
+  width: 27%;
+  border: 2px solid lightgray;
+  height: auto;
+  top: 50%;
+  left: 10%;
+  padding: 20px;
+  font-size: 0.8em;
+  font-weight: bold;
+
+
+}
+
+
+.twobyone {
+  width: 100%;
+  height: 300px;
+
+
+}
+
+.imgbox {
+  background-color: lightgreen;
+  width: 40%;
+  height: 80%;
+  margin: 5%;
+  position: relative;
+  float: left;
+
+  background-size: 100% 100%;
+  background-image:
+linear-gradient(to bottom, rgba(245, 246, 252, 0.52), rgba(117, 19, 93, 0.73)),
+url("../images/intro_img1.jpg");
+}
+
+.imgbox > img {
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.imgboxmsg {
+  position: absolute;
+  height: 35%;
+  width: 60%;
+  top: 20%;
+  border: 2px solid yellowgreen;
+  left: 10%;
+  color: white;
+
+
+}
+.imgboxmsg > p {
+margin: 10%;
+font-size: 0.7em;
+}
+
+
+.imgboxtwo {
+  width: 39%;
+  height: 80%;
+  margin: 5%;
+  background: rgb(34,193,195);
+ background: linear-gradient(-135deg, rgba(154, 205, 50, 0.2), rgba(117, 19, 93, 0.2));
+ float:left;
+ border: 1px solid lightgreen;
+ color: olivedrab
+}
+
+.imgboxtwo > h4 {
+  margin-left: 10%;
+  margin-bottom: 0px;
+}
+
+.imgboxtwo > p {
+  margin-left: 10%;
+  margin-right: 10%;
+  font-size: 0.8em;
+}
+.threebyone {
+  width: 100%;
+  height: 500px;
+
+}
+
+.product {
+
+
+height: 90%;
+width: 25%;
+float: left;
+margin-left: 6.25%;
+text-align: center;
+  font-size: 0.8em;
+}
+
+.product > img {
+  margin-top: 2%;
+  width: 90%;
+  margin-bottom: 4%;
+}
+
+.product > h5 {
+  color: olivedrab;
+  font-size: 0.7em;
+}
+.footer {
+  background-color: #303030;
+  width: 85%;
+  margin-left: 2%;
+    margin-right: 5%;
+  text-align: center;
+  color: white;
+     padding-left: 5%;
+     padding-right: 5%;
+     padding-bottom: 5%;
+     padding-top: 3%;
+     font-size: 0.7em;
+}
+
+.footerbox {
+
+  text-align: center;
+  width: 20%;
+  float: left;
+  margin-left: 3.5%;
+}
+
+.footerbox > hr {
+   background-color: white;
+   border: none;
+   height: 1px;
+   width: 80%;
+
+}
+
+.footerbox > p {
+  float: right;
+}
+
+
+.spacer {
+  width: 80%;
+  height: 3px;
+  background-color: white;
+  margin-top: 30%;
+  margin-bottom: 5%;
+}
+
+
+.socialmediaL {
+  width: 100%;
+
+}
+
+.socialmedia1 {
+  width: 38%;
+
+  float: left;
+  height: 100px;
+
+}
+.socialmedia2 {
+  padding: 5px;
+  width: 58.5%;
+  height: 100px;
+
+  float: left;
+  text-align: right;
+
+}
+
+
+.socialmediaimg {
+  width: 28px;
+  margin-left: 15px;
+}
+
+
+/* modal Window */
+
+
+.modal{
+top: 0;
+left:0;
+bottom:0;
+right:0;
+background-color: rgba(99, 107, 105,0.5);
+position: fixed;
+opacity: 0;
+pointer-events: none;
+}
+
+
+.modal:target {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.messageBlock{
+top:30%;
+left:33%;
+width:25%;
+height: 50%;
+border-radius: 5%;
+box-shadow: 7px 10px #333333;
+position: absolute;
+background-color: white;
+overflow: hidden;
+}
+
+
+.row1 {
+  width: 84%;
+  height:5%;
+  float: left;
+  padding-left: 5%;
+}
+
+.row12 {
+  width: 9%;
+  height: 9%;
+  padding-top: 8px;
+  padding-right: 2%;
+  float: left;
+  background-color: lightgray;
+  text-align: center;
+
+}
+.row1 > p {
+  margin-bottom: 5px;
+  padding:  0px;
+}
+.row12 > a {
+  text-decoration: none;
+  color: black;
+}
+
+.sm-break {
+  height: 1px;
+  background-color: lightgray;
+  width: 100%;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+}
+.sm-break2 {
+  height: 1px;
+  background-color: white;
+  width: 80%;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.row2 {
+top: 18%;
+height: 50%;
+width: 40%;
+padding-left: 5%;
+position: absolute;
+}
+
+.row2 > img {
+ width: 90%;
+ height: 90%;
+ margin-left: auto;
+ margin-right: auto;
+}
+
+.row22 {
+  width: 45%;
+  height: 50%;
+  position: absolute;
+  padding-right: 5%;
+  padding-left: 5%;
+  top: 18%;
+  left: 43%;
+  font-size: .63em;
+}
+
+.row22 > h5 {
+  font-size: .6em;
+}
+
+.row22 > p {
+  font-size: .5em;
+  margin-top: 10%;
+}
+
+.row3 {
+  height: 14%;
+  width: 95%;
+  background: lightgray;
+  position: absolute;
+  top: 67%;
+  padding: 5%;
+  font-size: .5em;
+}
+
+.row3 > button {
+  font-size: 1.2em;
+}
