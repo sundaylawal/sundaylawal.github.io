@@ -2,91 +2,183 @@ provider "aws" {
   region     = "us-east-1"
 }
 
-# creating vpc
-resource "aws_vpc" "Team-us-set6_vpc" {
-  cidr_block        = "10.0.0.0/16"
-  #instance_tenancy = "default"
-
+#create a vpc
+resource "aws_vpc" "adoptedpet_vpc" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+  
   tags = {
-    Name = "Team-us-set6_vpc"
+    Name = "adoptedpet"
   }
 }
-# creating first public subnet
-resource "aws_subnet" "public_subnet_1" {
-  vpc_id            = aws_vpc.Team-us-set6_vpc.id
-  cidr_block        = "10.0.1.0/24"
+
+
+#create subnets
+  resource "aws_subnet" "adoptedpet_pubsubnet1" {
+  vpc_id     = aws_vpc.adoptedpet_vpc.id
+  cidr_block = "10.0.1.0/24"
   availability_zone = "us-east-1a"
 
   tags = {
-    Name = "Public_subnet_1"
+    Name = "adoptedpet_pubsubnet1"
   }
-}
-#   creating second public subnet
-resource "aws_subnet" "public_subnet_2" {
-  vpc_id            = aws_vpc.Team-us-set6_vpc.id
-  cidr_block        = "10.0.3.0/24"
+
+  }
+  resource "aws_subnet" "adoptedpet_pubsubnet2" {
+  vpc_id     = aws_vpc.adoptedpet_vpc.id
+  cidr_block = "10.0.3.0/24"
   availability_zone = "us-east-1b"
 
   tags = {
-    Name = "Public_subnet_2"
+    Name = "adoptedpet_pubsubnet2"
   }
 }
-# creating a single private subnet
-resource "aws_subnet" "private_subnet_1" {
-  vpc_id            = aws_vpc.Team-us-set6_vpc.id
-  cidr_block        = "10.0.2.0/24"
+
+  resource "aws_subnet" "adoptedpet_prisubnet1" {
+  vpc_id     = aws_vpc.adoptedpet_vpc.id
+  cidr_block = "10.0.2.0/24"
   availability_zone = "us-east-1a"
 
   tags = {
-    Name = "private_subnet_1"
+    Name = "adoptedpet_prisubnet1"
   }
+
 }
-# creating front end security group
-resource "aws_security_group" "Frontend" {
-  name        = "Frontend"
-  description = "enable http/ssh access fromm port 8080/22"
-  vpc_id      = aws_vpc.Team-us-set6_vpc.id
-
-  ingress {
-    description = "http access"
-    from_port   = 8080
-    to_port     = 8085
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "ssh access"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
+  resource "aws_subnet" "adoptedpet_prisubnet2" {
+  vpc_id     = aws_vpc.adoptedpet_vpc.id
+  cidr_block = "10.0.4.0/24"
+  availability_zone = "us-east-1b"
 
   tags = {
-    Name = "Frontend"
+    Name = "private_subnet_2"
   }
 }
-# creating backend security group
-resource "aws_security_group" "Backend" {
-  name        = "Backend"
+
+#create internet gateway
+resource "aws_internet_gateway" "adoptedpet_intgw" {
+  vpc_id = aws_vpc.adoptedpet_vpc.id
+
+  tags = {
+    Name = "adoptedpet_intgw"
+  }
+}
+resource "aws_eip" "nat" {
+
+   depends_on = [aws_internet_gateway.adoptedpet_intgw]
+}
+
+#create nat gateway
+resource "aws_nat_gateway" "adoptedpet_natgw" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.adoptedpet_pubsubnet1.id
+
+  tags = {
+    Name = "adoptedpet_natgw"
+  }
+}
+
+#create route tables
+resource "aws_route_table" "adoptedpet_pub_rt" {
+vpc_id = aws_vpc.adoptedpet_vpc.id
+
+route {
+cidr_block = "0.0.0.0/0"
+gateway_id = aws_internet_gateway.adoptedpet_intgw.id
+
+}
+
+tags = {
+Name = "adoptedpet_pub_rt"
+}
+}
+
+
+resource "aws_route_table" "adoptedpet_pri_rt" {
+vpc_id = aws_vpc.adoptedpet_vpc.id
+route {
+cidr_block = "0.0.0.0/0"
+nat_gateway_id = aws_nat_gateway.adoptedpet_natgw.id
+    }
+
+tags = {
+Name = "adoptedpet_pri_rt"
+
+  }
+}
+
+#create route table association
+resource "aws_route_table_association" "adoptedpet_pub_rt_as1" {
+subnet_id      = aws_subnet.adoptedpet_pubsubnet1.id
+route_table_id = aws_route_table.adoptedpet_pub_rt.id
+
+}
+
+resource "aws_route_table_association" "adoptedpet_pub_rt_as2" {
+subnet_id      = aws_subnet.adoptedpet_pubsubnet2.id
+route_table_id = aws_route_table.adoptedpet_pub_rt.id
+
+}
+
+resource "aws_route_table_association" "adoptedpet_pri_rt_as1" {
+subnet_id      = aws_subnet.adoptedpet_prisubnet1.id
+route_table_id = aws_route_table.adoptedpet_pri_rt.id
+
+}
+
+resource "aws_route_table_association" "adoptedpet_pri_rt_as2" {
+subnet_id      = aws_subnet.adoptedpet_prisubnet2.id
+route_table_id = aws_route_table.adoptedpet_pri_rt.id
+
+}
+
+#create security groups
+
+resource "aws_security_group" "frontend" {
+  name        = "frontend"
+  description = "enable jenkins/tomacat/ssh access from port 8080/8085/22"
+  vpc_id      = aws_vpc.adoptedpet_vpc.id
+
+  ingress {
+
+      description      = "tomcat access"
+      from_port        = 8080
+      to_port          = 8090
+      protocol         = "tcp"
+      cidr_blocks      = ["0.0.0.0/0"]
+    }
+
+  ingress {
+      description      = "ssh access"
+      from_port        = 22
+      to_port          = 22
+      protocol         = "tcp"
+      cidr_blocks      = ["0.0.0.0/0"]
+    }
+
+  egress {
+      from_port        = 0
+      to_port          = 0
+      protocol         = "-1"
+      cidr_blocks      = ["0.0.0.0/0"]
+    }
+
+  tags = {
+    Name = "frontend"
+  }
+}
+
+# Create backend security group
+resource "aws_security_group" "backend" {
+  name        = "backend"
   description = "enable mysql/aurora/ssh access fromm port 3306/22"
-  vpc_id      = aws_vpc.Team-us-set6_vpc.id
+  vpc_id      = aws_vpc.adoptedpet_vpc.id
 
   ingress {
     description     = "mysql access"
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
-    security_groups = ["${aws_security_group.Frontend.id}"]
+    security_groups = ["${aws_security_group.frontend.id}"]
   }
 
   ingress {
@@ -94,7 +186,7 @@ resource "aws_security_group" "Backend" {
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
-    security_groups = ["${aws_security_group.Frontend.id}"]
+    security_groups = ["${aws_security_group.frontend.id}"]
   }
 
   egress {
@@ -106,85 +198,26 @@ resource "aws_security_group" "Backend" {
 
 
   tags = {
-    Name = "Backend"
-  }
-}
-resource "aws_internet_gateway" "set6_INTGW" {
-  vpc_id = aws_vpc.Team-us-set6_vpc.id
-
-  tags = {
-    Name = "set6_INTGW"
-  }
-}
-resource "aws_eip" "nat" {
-  depends_on = [aws_internet_gateway.set6_INTGW]
-}
-resource "aws_nat_gateway" "set6_NTGW" {
-  allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.public_subnet_1.id
-
-  tags = {
-    Name = "set6_NTGW"
-  }
-}
-
-resource "aws_route_table" "Set6_Pub_RT" {
-  vpc_id = aws_vpc.Team-us-set6_vpc.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.set6_INTGW.id
-  }
-
-  tags = {
-    Name = "Set6_Pub_RT"
+    Name = "backend"
   }
 }
 
 
-resource "aws_route_table" "Set6_Pri_RT" {
-  vpc_id = aws_vpc.Team-us-set6_vpc.id
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.set6_NTGW.id
-  }
-
-  tags = {
-    Name = "Set6_Pri_RT"
-  }
-}
-
-
-resource "aws_route_table_association" "Set6_Pub_RT_AS1" {
-  subnet_id      = aws_subnet.public_subnet_1.id
-  route_table_id = aws_route_table.Set6_Pub_RT.id
-}
-
-
-resource "aws_route_table_association" "Set6_Pub_RT_AS2" {
-  subnet_id      = aws_subnet.public_subnet_2.id
-  route_table_id = aws_route_table.Set6_Pub_RT.id
-}
-
-
-resource "aws_route_table_association" "Set6_Pri_RT_AS1" {
-  subnet_id      = aws_subnet.private_subnet_1.id
-  route_table_id = aws_route_table.Set6_Pri_RT.id
-}
-
-# creating jenkins server keypair
+#keypair configuration
 resource "aws_key_pair" "Set6" {
   key_name   = "Set6"
   public_key = file(var.path_to_public_key)
 }
 
-# creating jenkins server
+# create of Jenkins server
 resource "aws_instance" "jenkins_server" {
-   ami             = "ami-0b0af3577fe5e3532"
-   instance_type   = "t2.medium"
-   subnet_id       = aws_subnet.public_subnet_2.id
-   security_groups = ["${aws_security_group.Frontend.id}"]
+   ami                         = "ami-0b0af3577fe5e3532"
+   instance_type               = "t2.medium"
+   subnet_id                   = aws_subnet.adoptedpet_pubsubnet1.id
+   security_groups             = ["${aws_security_group.frontend.id}"]
    associate_public_ip_address = true 
-   key_name        = "Set6"
+   key_name                    = "Set6"
+   
    user_data       = <<-EOF
        #!/bin/bash
        sudo su 
@@ -202,29 +235,19 @@ resource "aws_instance" "jenkins_server" {
     volume_size   = "10"
     volume_type   = "gp2"
   }
-  lifecycle {
-    prevent_destroy = false
-  }
   tags = {
-     Name = "jenkins_server"
+     Name = "jenkins_server2"
    }
 }
 
-# creating tomcat_server keypair
-resource "aws_key_pair" "tomcat_key_pair" {
-  key_name   = "Set6"
-  public_key = file(var.path_to_public_key)
-}
-
-# creating tomcat server
-resource "aws_instance" "tomcat_server" {
+#create app server
+resource "aws_instance" "app_server" {
   ami                         = "ami-0b0af3577fe5e3532" 
   instance_type               = "t2.medium"
-  key_name                    = "Set6"
-  subnet_id                   = aws_subnet.public_subnet_1.id
-  vpc_security_group_ids      = ["${aws_security_group.Frontend.id}"]
+  key_name                    = aws_key_pair.set-6-keypair.key_name
+  subnet_id                   = aws_subnet.adoptedpet_pubsubnet1.id
+  vpc_security_group_ids      = ["${aws_security_group.frontend.id}"]
   associate_public_ip_address = true
-
 user_data = <<-EOF
 #!/bin/bash
 sudo su
@@ -273,7 +296,7 @@ cat <<EOT > /opt/apache-tomcat-10.0.12/conf/tomcat-users.xml
 <role rolename="manager-status"/>
 <role rolename="admin-gui"/>
 <role rolename="admin-script"/>
-<user username="admin" password="admin@123" roles="manager-gui, admin-gui, admin-script, manager-script, manager-jmx, manager-status"/>
+<user username="admin" password="cloudjerky@123" roles="manager-gui, admin-gui, admin-script, manager-script, manager-jmx, manager-status"/>
 </tomcat-users>
 EOT
 cat << EOT > /opt/apache-tomcat-10.0.12/conf/server.xml
@@ -334,18 +357,18 @@ resource "aws_ami_from_instance" "app_server_image" {
 }
 
 # creating launch configuration for webserver ASG
-resource "aws_launch_configuration" "Set6LC" {
-  name                        = "Set6LC"
+resource "aws_launch_configuration" "adoptedpetLC" {
+  name                        = "adoptedpetLC"
   image_id                    = aws_ami_from_instance.app_server_image.id
-  key_name                    = "babe"
+  key_name                    = "adoptedpet"
   instance_type               = "t2.medium"
   associate_public_ip_address = true
   security_groups             = [aws_security_group.Frontend.id]
 }
 
 creating load balancer target group
-resource "aws_lb_target_group" "Set6TG" {
-  name             = "SET6TG"
+resource "aws_lb_target_group" "adoptedpetTG" {
+  name             = "adoptedpetTG"
   port             = 8080
   protocol         = "HTTP"
   vpc_id           = aws_vpc.Team-us-set6_vpc.id
@@ -363,16 +386,16 @@ resource "aws_lb_target_group" "Set6TG" {
 }
 
 # attaching the targeted instance to the above target group
-resource "aws_lb_target_group_attachment" "Set6TG" {
-  target_group_arn = aws_lb_target_group.Set6TG.arn
+resource "aws_lb_target_group_attachment" "adoptedpetTG" {
+  target_group_arn = aws_lb_target_group.adoptedpetTG.arn
   target_id        = aws_instance.app_server.id
   port             = 8080
 
 }
 
 # creating load balancer
-resource "aws_lb" "Set6LB" {
-  name               = "Set6LB"
+resource "aws_lb" "adoptedpetTG" {
+  name               = "adoptedpetTG"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.Frontend.id]
@@ -380,31 +403,31 @@ resource "aws_lb" "Set6LB" {
 
 }
 
-resource "aws_lb_listener" "Set6LB" {
-  load_balancer_arn = aws_lb.Set6LB.arn
+resource "aws_lb_listener" "adoptedpetLB" {
+  load_balancer_arn = aws_lb.adoptedpetLB.arn
   port              = 80
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.Set6TG.arn
+    target_group_arn = aws_lb_target_group.adoptedpetLB.arn
   }
 }
 
 # creating of auto-scalling group 
-resource "aws_autoscaling_group" "Set6ASG" {
-  name                      = "Set6ASG"
-  launch_configuration      = aws_launch_configuration.Set6LC.id
+resource "aws_autoscaling_group" "adoptedpetASG" {
+  name                      = "adoptedpetASG"
+  launch_configuration      = aws_launch_configuration.adoptedpetLC.id
   vpc_zone_identifier       = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
-  target_group_arns         = [aws_lb_target_group.Set6TG.arn]
+  target_group_arns         = [aws_lb_target_group.adoptedpetTG.arn]
   desired_capacity          = 2
   max_size                  = 4
   min_size                  = 1
 }
 
 # aws autoscaling policy
-resource "aws_autoscaling_policy" "Set6ASG_policy" {
-  name                   = "Set6ASG-policy"
+resource "aws_autoscaling_policy" "adoptedpetASG_policy" {
+  name                   = "adoptedpet-policy"
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
@@ -412,8 +435,8 @@ resource "aws_autoscaling_policy" "Set6ASG_policy" {
 
 }
 # metric alarm to activate scaling
-resource "aws_cloudwatch_metric_alarm" "Set6ASG-Alarm" {
-  alarm_name          = "Set6ASG-Alarm"
+resource "aws_cloudwatch_metric_alarm" "adoptedpetASG-Alarm" {
+  alarm_name          = "adoptedpet-Alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "2"
   metric_name         = "CPUUtilization"
@@ -427,26 +450,26 @@ resource "aws_cloudwatch_metric_alarm" "Set6ASG-Alarm" {
   }
 
   alarm_description = "This metric monitors ec2 cpu utilization"
-  alarm_actions     = [aws_autoscaling_policy.Set6ASG_policy.arn]
+  alarm_actions     = [aws_autoscaling_policy.adoptedpetASG_policy.arn]
 }
 
 # creating route 53 zone
-resource "aws_route53_zone" "set6_route53_zone" {
-  name = "set6usteam.us"
+resource "aws_route53_zone" "adoptedpet_route53_zone" {
+  name = "adoptedpet_route53"
 
   tags = {
-    Environment = "dev_set6"
+    Environment = "dev_adoptedpet"
   }
 }
 # creating route 53 "A" records and attaching the load balancer as the source
-resource "aws_route53_record" "set6_A_record" {
-  zone_id = aws_route53_zone.set6_route53_zone.zone_id
-  name    = "usteamset6.com"
+resource "aws_route53_record" "adoptedpet_A_record" {
+  zone_id = aws_route53_zone.adoptedpet_route53_zone.zone_id
+  name    = "adoptedpet_route53_zone.com"
   type    = "A"
  
   alias {
-    name                   = aws_lb.Set6LB.dns_name
-    zone_id                = aws_lb.Set6LB.zone_id
+    name                   = aws_lb.adoptedpet.dns_name
+    zone_id                = aws_lb.adoptedpet6LB.zone_id
     evaluate_target_health = false
   }
 }
