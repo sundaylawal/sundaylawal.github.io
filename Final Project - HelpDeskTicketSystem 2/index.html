@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="x-ua-compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>HELP DESK TICKETING SYSTEM | LOGIN</title>
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script src="scripts/main.js" defer></script>
+
+    </head>
+
+    <body style="background-color:lavenderblush;" onload="init()">
+
+        <div class="container">
+            <img class='pic' src="images/help.jpg" alt="Mr. Help Desk"/><br><br><br><br>
+            <div class="row">
+            <div class="col-sm-6">
+                <h1 class="display-4 text-center"><br>Help Desk<br> Ticketing System</h1>
+            </div>
+
+            <div class="jumbotron col-sm-6" style="background-color:lavender;">
+                <form id="loginForm" autocomplete="on">
+                    <h1>Login</h1>
+                    <div class="form-group">
+                        <label for="usrLogin">Username:</label>
+                        <input type="text" class="form-control" id="usrLogin" autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwdLogin">Password:</label>
+                        <input type="password" class="form-control" id="pwdLogin">
+                     </div>
+                    <button type="button" class="btn btn-success" onclick="login()">Login</button>
+                </form>
+                <!-- this link href should be to register.html -->
+                <br>
+                <div><a href="index.html">Click here to register</a></div><br>
+                <div id="loginAlert">
+
+                </div>
+            </div>
+            </div>
+        </div>
+            
+            <script async>
+                console.log
+                (
+                    `username - demoUser | password - demoPass`
+                )
+            </script>
+    </body>
+
+    <footer class="text-center card-footer fixed-bottom">
+        <p>Project by Group 1</p>
+    </footer>
+</html>

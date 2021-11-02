@@ -1,0 +1,56 @@
+<!-- this page is extra, incase we have time  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HELP DESK TICKETING SYSTEM</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="scripts/main.js" defer></script>
+
+</head>
+
+<body style="background-color:lavenderblush;" onload="init()">
+    <div class="container">
+        <a href="index.html"><img class='pic' src="images/help.jpg alt="Mr. Help Desk"/></a>
+
+        <div class="row">
+        <div class="col-sm-6"></div>
+        <div class="jumbotron col-sm-6" style="background-color:lavender;">
+        <div>
+            <h1>Register</h1>
+        </div>
+
+        <form id="registrationForm" autocomplete="on">
+            <div class="form-group">
+                <label for="usrRegister">Full Name:</label>
+                <input type="text" class="form-control" id="usrRegister"  autocomplete="name">
+            </div>
+
+            <div class="form-group">
+                <label for="usrNameRegister">Username:</label>
+                <input type="text" class="form-control" id="usrNameRegister" autocomplete="name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email address:</label>
+                <input type="email" class="form-control" id="email"  autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="pwdRegister">Password:</label>
+                <input type="password" class="form-control" id="pwdRegister">
+            </div>
+            <div>
+                <button type="button" class="btn btn-danger" onclick="register()">Register</button>
+            </div><br>
+            <div id="alert">
+            </div>
+        </form>
+        </div>
+        </div>
+    </div>  
+</body>
+</html>

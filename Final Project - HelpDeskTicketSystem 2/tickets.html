@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HELP DESK TICKETING SYSTEM | TICKETS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="scripts/ticket.js" defer></script>
+    <script src ="scripts/main.js" defer></script>
+    <style>
+    </style>
+
+</head>
+      <body>
+        <div class="container col-sm-12">
+            <div class="bg-light text-dark">
+              <a href="index.html"><img class='pic' src="images/help.jpg" alt="Mr. Help Desk"/></a>
+            </div>
+
+            <div class="jumbotron" style="background-color:snow;">
+
+            <div class="row">
+            <div id="headerTicket" on></div>
+            <div class="col-md-12 text-center">
+            <div>
+                <a href="#outerDiv">
+                    <button type="button" class="btn btn-danger" onclick="newTicket()">Add New Ticket</button>
+                </a>
+            </div>
+            </div> 
+            
+            <br><br>
+
+            <div class="table-bordered table-hover table-responsive" style="width: 100%">
+                <table class="table" id="ticketTable" style="background-color:dimgray">
+                    <thead>
+                        <tr>
+                            <th>Ticket No.</th>
+                            <th>Title</th>
+                            <th>Department</th>
+                            <th>Priority</th>
+                            <th>Reported By</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticketTableBody"></tbody>
+                </table>
+            </div>
+            </div>
+            </div>
+        </div>
+        <div id="outerDiv"></div>
+
+      </body>
+</html>
